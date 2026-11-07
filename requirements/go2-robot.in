@@ -1,0 +1,8 @@
+# Robot's system ROS Python (Foxy=3.8, Humble=3.10); do not use the model .venv.
+numpy==1.24.4
+pillow==10.4.0
+requests==2.32.4
+scipy==1.10.1
+casadi==3.6.7
+pyrealsense2==2.55.1.6486
+opencv-python==4.11.0.86

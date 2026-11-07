@@ -1,0 +1,19 @@
+name: Go2 deployment checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cpu-checks:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m pip install uv==0.13.5
+      - run: bash scripts/go2/install_server.sh cpu
+      - run: .venv/bin/python -m pytest tests/go2 -q

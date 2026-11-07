@@ -1,0 +1,17 @@
+# Focused source-tree runtime: no Isaac/Habitat, baseline models or FlashAttention build.
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.51.0
+diffusers==0.33.1
+accelerate==1.4.0
+huggingface-hub==0.33.4
+numpy==1.26.4
+pillow==11.3.0
+opencv-python-headless==4.11.0.86
+einops==0.8.1
+ftfy==6.3.1
+scipy==1.15.3
+flask==3.1.2
+pydantic==2.11.7
+requests==2.32.5
+pytest==7.4.4
