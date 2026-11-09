@@ -158,3 +158,5 @@ config/go2.env
 .tools/
 test_data/
 output/
+/offline-*/
+/offline-*.tar
