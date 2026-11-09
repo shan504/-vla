@@ -6,6 +6,8 @@ if [[ -f config/go2.env ]]; then
   source config/go2.env
   set +a
 fi
+unset PYTHONPATH PYTHONHOME
+export PYTHONNOUSERSITE=1
 exec .venv/bin/python -m go2.server \
   --model-path "${MODEL_PATH:-checkpoints/InternVLA-N1-DualVLN}" \
   --host "${SERVER_HOST:-127.0.0.1}" --port "${SERVER_PORT:-5801}" \

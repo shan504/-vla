@@ -16,6 +16,8 @@ bash scripts/go2/install_server.sh cu124
 
 安装脚本建立 Python 3.10 `.venv`，严格按带哈希的锁文件安装 Torch 2.6.0 / CUDA 12.4、Transformers 4.51.0、Diffusers 0.33.1。默认使用 PyTorch SDPA，不需要编译 FlashAttention。不执行上游包含其他基线的全量 `[model]` 安装。
 
+集群普通账号也可安装：缺少 `ensurepip` / `python3-venv` 时，引导程序直接从官方 PyPI 下载固定版本的独立 `uv` 并核验 SHA256，无需 apt 或 sudo。Python、工具和缓存位于本项目 `.tools/`，依赖仅装到本项目 `.venv/`；脚本忽略继承的 `PYTHONPATH`、`PYTHONHOME` 和用户 site-packages，不修改系统 Python、已有 Conda 环境或其他项目。此前失败留下的 `.tools/uv` 文件可保留，无需删除。
+
 下载结果为：
 
 ```text
