@@ -4,6 +4,7 @@ import argparse
 import io
 import json
 import threading
+import traceback
 from pathlib import Path
 
 import numpy as np
@@ -185,8 +186,10 @@ def main():
     try:
         intrinsic = parse_intrinsic(args.camera_intrinsic) if args.camera_intrinsic else None
         agent = load_agent(args)
-    except (ValueError, RuntimeError) as exc:
-        parser.exit(1, f'{exc}\n')
+    except (ValueError, RuntimeError):
+        # Keep the failing module and load path in batch logs. The exception
+        # message alone can hide which of several Linear layers failed.
+        parser.exit(1, traceback.format_exc())
     app = create_app(agent, camera_intrinsic=intrinsic)
     app.run(host=args.host, port=args.port, threaded=False, use_reloader=False)
 

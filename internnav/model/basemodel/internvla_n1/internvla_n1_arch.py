@@ -32,8 +32,16 @@ def build_depthanythingv2(config):
 
     model_configs = {'vits': {'encoder': 'vits', 'features': 64, 'out_channels': [48, 96, 192, 384]}}
     DAv2_model = DepthAnythingV2(**model_configs['vits'])
+    # HF from_pretrained builds this module inside Accelerate's meta context.
+    # A normal load_state_dict there is a no-op, while assign=True still passes
+    # through Accelerate's patched register_parameter and leaves meta weights.
+    # Materialize storage first, then let PyTorch strictly validate and copy the
+    # complete auxiliary checkpoint before returning its RGB backbone.
+    if any(tensor.is_meta for tensor in DAv2_model.state_dict().values()):
+        DAv2_model.to_empty(device='cpu')
     DAv2_model.load_state_dict(
-        torch.load(f'{MODEL_PATH_TO}/depth_anything_v2_metric_hypersim_vits.pth', map_location="cpu")
+        torch.load(f'{MODEL_PATH_TO}/depth_anything_v2_metric_hypersim_vits.pth', map_location="cpu", weights_only=True),
+        strict=True,
     )  # download from https://huggingface.co/depth-anything/Depth-Anything-V2-Metric-Hypersim-Small/resolve/main/depth_anything_v2_metric_hypersim_vits.pth
     rgb_model = DAv2_model.pretrained
 

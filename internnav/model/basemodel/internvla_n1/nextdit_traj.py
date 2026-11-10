@@ -101,7 +101,10 @@ class LuminaNextDiTBlock(nn.Module):
 
         self.feed_forward = LuminaFeedForward(
             dim=dim,
-            inner_dim=4 * dim,
+            # DualVLN was trained with Diffusers <=0.32's SwiGLU 2/3
+            # reduction. Diffusers 0.33 takes inner_dim literally, so apply
+            # that checkpoint dimension explicitly before multiplier/rounding.
+            inner_dim=int(2 * (4 * dim) / 3),
             multiple_of=multiple_of,
             ffn_dim_multiplier=ffn_dim_multiplier,
         )
