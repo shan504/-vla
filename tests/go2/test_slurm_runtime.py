@@ -131,7 +131,7 @@ def test_scheduler_resources_do_not_guess_partition_or_gres():
     directives = [line for line in SCRIPT.read_text().splitlines() if line.startswith('#SBATCH')]
     assert '#SBATCH --job-name=internnav' in directives
     assert '#SBATCH --cpus-per-task=4' in directives
-    assert '#SBATCH --mem=32G' in directives
+    assert not any('--mem' in line for line in directives)
     assert not any('--partition' in line or '--gres' in line for line in directives)
 
 

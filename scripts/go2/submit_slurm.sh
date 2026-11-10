@@ -44,7 +44,13 @@ elif [[ -n ${INTERNNAV_TIME:-} ]]; then
   args+=(--time="$INTERNNAV_TIME")
 fi
 export INTERNNAV_PROJECT_ROOT="$project_root"
-submitted="$(sbatch "${args[@]}" "$project_root/run_internnav_server.sh" "${probe[@]}")"
+# This site's Lua policy assigns memory per GPU. Do not inherit a memory request
+# from another shell/job or override it in this project's batch directives.
+unset SBATCH_MEM_PER_NODE SBATCH_MEM_PER_CPU SBATCH_MEM_PER_GPU
+if ! submitted="$(sbatch "${args[@]}" "$project_root/run_internnav_server.sh" "${probe[@]}")"; then
+  echo "Slurm submission failed; no new job ID was recorded. Check the error above before retrying." >&2
+  exit 1
+fi
 job_id="${submitted%%;*}"
 if [[ ! $job_id =~ ^[0-9]+$ ]]; then
   echo "Could not parse sbatch output: $submitted" >&2

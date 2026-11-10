@@ -21,7 +21,7 @@ def project(tmp_path):
     fake_bin.mkdir()
     sbatch = fake_bin / 'sbatch'
     sbatch.write_text('#!/usr/bin/env python3\nimport os,json,sys\n'
-                      'with open(os.environ["SUBMIT_LOG"],"w") as f: json.dump({"args":sys.argv[1:],"project":os.environ.get("INTERNNAV_PROJECT_ROOT")},f)\n'
+                      'with open(os.environ["SUBMIT_LOG"],"w") as f: json.dump({"args":sys.argv[1:],"project":os.environ.get("INTERNNAV_PROJECT_ROOT"),"memory_env":{k:v for k,v in os.environ.items() if k in ["SBATCH_MEM_PER_NODE","SBATCH_MEM_PER_CPU","SBATCH_MEM_PER_GPU"]}},f)\n'
                       'print("73142;testcluster")\n')
     sbatch.chmod(0o755)
     env = os.environ.copy()
@@ -70,3 +70,22 @@ def test_normal_job_without_weights_does_not_submit(project):
     assert result.returncode == 1
     assert 'both model checkpoints' in result.stderr
     assert not Path(project[1]['SUBMIT_LOG']).exists()
+
+
+def test_site_policy_controls_memory_even_with_inherited_sbatch_values(project):
+    result = run(project, '--probe', INTERNNAV_PARTITION='gpu_4090', INTERNNAV_GRES='gpu:1',
+                 SBATCH_MEM_PER_NODE='32768', SBATCH_MEM_PER_CPU='8192', SBATCH_MEM_PER_GPU='32768')
+    assert result.returncode == 0, result.stderr
+    call = json.loads(Path(project[1]['SUBMIT_LOG']).read_text())
+    assert call['memory_env'] == {}
+    assert not any(value.startswith('--mem') for value in call['args'])
+
+
+def test_scheduler_rejection_does_not_record_a_new_job_id(project):
+    root, env = project
+    sbatch = Path(env['PATH'].split(os.pathsep)[0]) / 'sbatch'
+    sbatch.write_text('#!/bin/sh\necho "site memory policy rejection" >&2\nexit 1\n')
+    result = run(project, '--probe', INTERNNAV_PARTITION='gpu_4090', INTERNNAV_GRES='gpu:1')
+    assert result.returncode == 1
+    assert 'no new job ID' in result.stderr
+    assert not (root / 'logs/slurm/last-job-id').exists()
