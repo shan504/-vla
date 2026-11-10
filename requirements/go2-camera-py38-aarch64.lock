@@ -1,0 +1,9 @@
+# Camera-only dependencies for Jetson system Python 3.8 on Linux aarch64.
+# Hashes select official PyPI cp38/manylinux2014 aarch64 wheels.
+# Install into an independent camera venv, not Conda base or the model venv.
+numpy==1.24.4 \
+    --hash=sha256:a5425b114831d1e77e4b5d812b69d11d962e104095a5b9c3b641a218abcc050e
+Pillow==10.4.0 \
+    --hash=sha256:b15e02e9bb4c21e39876698abf233c8c579127986f8207200bc8a8f6bb27acf2
+pyrealsense2==2.55.1.6486 \
+    --hash=sha256:3695ae04d423d6404db4d0a756c66a0f122f9e0858c91d3dcee132adbef35b62

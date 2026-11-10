@@ -52,6 +52,8 @@ curl --fail http://127.0.0.1:5801/healthz
 
 ## 3. Go2 EDU 软件端
 
+先做相机图像推理时，按 [D435i 单次采样说明](REALSENSE.md) 保存 RGB、对齐深度和真实内参，再用 GPU 作业中的离线客户端请求模型。该步骤使用独立采样脚本；下面的 ROS、里程计和控制桥接用于后续导航阶段。
+
 先保留机器人现有的 ROS 2 和宇树软件。社区路线以 Ubuntu 20.04 / ROS 2 Foxy（Python 3.8）为参考，Ubuntu 22.04 / ROS 2 Humble（Python 3.10）也应使用其对应的系统 Python 和 ROS 包；不要在模型 `.venv` 中导入机器人端 ROS。
 
 在机器人终端：
