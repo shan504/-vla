@@ -12,6 +12,8 @@ Slurm 集群独立申请 4090 和运行模型服务见 [docs/SLURM.md](docs/SLUR
 
 D435i 单次采图、真实内参与离线实景推理见 [docs/REALSENSE.md](docs/REALSENSE.md)。
 
+InternNav 实机闭环的已验证状态与原生 SDK 后端见 [docs/INTERNNAV_AUTONOMY.md](docs/INTERNNAV_AUTONOMY.md)。
+
 ## GPU 工作站快速开始
 
 Linux x86_64、Python 3.10（脚本自动准备）、支持 CUDA 12.4 的 NVIDIA 驱动。官方推理参考配置为 RTX 4090 / A100。无需先装 Isaac Sim、Habitat 或训练数据集。
