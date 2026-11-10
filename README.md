@@ -8,6 +8,8 @@ Windows 无线开发与家庭/农场双 Wi-Fi 配置见 [docs/WIFI.md](docs/WIFI
 
 服务器离线安装和存储迁移见 [docs/OFFLINE.md](docs/OFFLINE.md)。
 
+Slurm 集群独立申请 4090 和运行模型服务见 [docs/SLURM.md](docs/SLURM.md)。
+
 ## GPU 工作站快速开始
 
 Linux x86_64、Python 3.10（脚本自动准备）、支持 CUDA 12.4 的 NVIDIA 驱动。官方推理参考配置为 RTX 4090 / A100。无需先装 Isaac Sim、Habitat 或训练数据集。

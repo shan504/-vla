@@ -155,6 +155,7 @@ result/
 
 # Go2 local deployment state
 config/go2.env
+config/slurm.env
 .tools/
 test_data/
 output/
